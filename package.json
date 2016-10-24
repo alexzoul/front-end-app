@@ -1,0 +1,24 @@
+{
+  "name": "front-end-app",
+  "version": "1.0.0",
+  "description": "VanilaJs, SASS, GulpJs, JasmineJs.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexzoul/front-end-app.git"
+  },
+  "author": "Erick Alejandro Villanueva Molina",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexzoul/front-end-app/issues",
+    "email": "ing.alejandrovillanueva@gmail.com"
+  },
+  "homepage": "https://github.com/alexzoul/front-end-app#readme",
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}
