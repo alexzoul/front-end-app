@@ -1,0 +1,14 @@
+{
+  "name": "front-end-app",
+  "description": "VanilaJs, SASS, GulpJs, JasmineJs.",
+  "main": "index.js",
+  "authors": [
+    "Erick Alejandro Villanueva Molina"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/alexzoul/front-end-app",
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-route": "^1.5.8"
+  }
+}
