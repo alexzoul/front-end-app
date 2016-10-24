@@ -4,5 +4,6 @@
   "excludeFiles": [
     "node_modules/**",
     "dist/**",
+    "app/scripts/templates.js",
   ],
 }

@@ -4,5 +4,11 @@
 #NodeJs Files
 /node_modules
 
+#NodeJs Files
+/node_modules
+
+#Bower Dependences
+app/lib
+
 #Dist Files
 /dist

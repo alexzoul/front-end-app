@@ -1,0 +1,1 @@
+angular.module('frontEndApp.templates', []).run(['$templateCache', function($templateCache) {$templateCache.put('views/home.tpl.html','<div\tclass="collection">\n\t<a class="collection-item">\n\t\t{{testText}}\n\t</a>\n</div>\n');}]);

@@ -5,6 +5,7 @@ var	gulp =	require('gulp'),
 		inject = require('gulp-inject'),
 		gulpif = require('gulp-if'),
 		useref = require('gulp-useref'),
+    templateCache	=	require('gulp-angular-templatecache'),
     wiredep	=	require('wiredep').stream;
 
 
@@ -77,13 +78,26 @@ gulp.task('copy',	function()	{
 				.pipe(gulp.dest('./dist'));
 });
 
+//	Compila	las	plantillas	HTML	parciales	a	JavaScript
+//	para	ser	inyectadas	por	AngularJS	y	minificar	el	código
+gulp.task('templates',	function()	{
+		gulp.src('./app/views/**/*.tpl.html')
+				.pipe(templateCache({
+						root:	'views/',
+						module:	'frontEndApp.templates',
+						standalone:	true
+				}))
+				.pipe(gulp.dest('./app/scripts'));
+});
+
 //	Vigila cambios que se produzcan	en el	código y lanza las tareas relacionadas
 gulp.task('watch', function() {
-  gulp.watch(['./app/scripts/**/*.js', './Gulpfile.js'], ['jshint',	'inject']);
+  gulp.watch(['./app/**/*.html'], ['livereload', 'templates']);
+  gulp.watch(['./app/scripts/**/*.js', './gulpfile.js'], ['jshint',	'inject']);
   gulp.watch(['./bower.json'], ['wiredep']);
   gulp.watch(['./app/**/*.html'], ['livereload']);
 });
 
 
-gulp.task('default', ['server', 'inject', 'wiredep', 'watch']);
-gulp.task('build', ['compress', 'copy']);
+gulp.task('default', ['server', 'templates', 'inject', 'wiredep', 'watch']);
+gulp.task('build', ['templates', 'compress', 'copy']);
