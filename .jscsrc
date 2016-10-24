@@ -1,0 +1,8 @@
+#Jshint Documentation: http://jscs.info
+{
+  "preset": "airbnb",
+  "excludeFiles": [
+    "node_modules/**",
+    "dist/**",
+  ],
+}
