@@ -1,0 +1,8 @@
+#OSX Files
+.DS_Store
+
+#NodeJs Files
+/node_modules
+
+#Dist Files
+/dist
