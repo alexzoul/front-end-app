@@ -6,10 +6,11 @@ var	gulp =	require('gulp'),
 		gulpif = require('gulp-if'),
 		useref = require('gulp-useref'),
     templateCache	=	require('gulp-angular-templatecache'),
+		sass = require('gulp-sass'),
+		minifyCss	=	require('gulp-minify-css'),
     wiredep	=	require('wiredep').stream;
 
 
-//	Servidor web de	desarrollo
 gulp.task('server',	function() {
 	connect.server({
 		root:	'./app',
@@ -19,40 +20,34 @@ gulp.task('server',	function() {
 	});
 });
 
-//	Servidor web de	produccion
-gulp.task('server-dist',	function()	{
-	connect.server({
-		root:	'./dist',
-		hostname:	'0.0.0.0',
-		port:	8082,
-		livereload:	true
-	});
-});
-
-//	Recarga	el navegador cuando	hay	cambios	en el	HTML
 gulp.task('livereload',	function() {
 	gulp.src('./app/**/*.html')
 		.pipe(connect.reload());
 });
 
-//	Busca	errores	en el	JS y nos los muestra por pantalla
-gulp.task('jshint',	function() {
-	return gulp.src('./app/scripts/**/*.js')
-  .pipe(jscs({configPath: '.jscsrc'}))
-  .pipe(jscs.reporter());
+gulp.task('styles', function() {
+  return gulp.src('./app/stylesheets/main.scss')
+    .pipe(sass({
+      outputStyle: "compressed"
+    }).on('error', sass.logError))
+    .pipe(gulp.dest('./app/stylesheets'))
+		.pipe(connect.reload());
 });
 
-//	Busca en las carpetas de estilos y javascript	los	archivos que hayamos creado
-//	para inyectarlos en	el index.html
+gulp.task('jshint',	function() {
+	return gulp.src('./app/scripts/**/*.js')
+  	.pipe(jscs({configPath: '.jscsrc'}))
+  	.pipe(jscs.reporter());
+});
+
 gulp.task('inject', function() {
 	var sources = gulp.src(['./app/stylesheets/**/*.css', './app/scripts/**/*.js'], {read:false});
 	return gulp.src('./app/index.html')
-	.pipe(inject(sources, {relative: true}))
-	.pipe(gulp.dest('./app'));
+		.pipe(inject(sources, {relative: true}))
+		.pipe(gulp.dest('./app'));
 });
 
-//	Inyecta	las	librerias	que	instalemos vía Bower
-gulp.task('wiredep', function () {
+gulp.task('inject-bower-components', function () {
 	gulp.src('./app/index.html')
 		.pipe(wiredep({
 			directory:	'./app/lib'
@@ -60,44 +55,46 @@ gulp.task('wiredep', function () {
 		.pipe(gulp.dest('./app'));
 });
 
-//Esta tarea archivos enlazados en el index.html los depositará en el nuevo directorio
-//para producción que será /dist, ya minificados.
-//En este directorio también necesitamos el index.html pero sin los comentarios y con
-//los enlaces a los nuevos ficheros minificados.
-gulp.task('compress',	function()	{
-		gulp.src('./app/index.html')
-				.pipe(useref())
-				.pipe(gulpif('*.js', uglify({ mangle: false })))
-				.pipe(gulp.dest('./dist'));
-});
-
-//Copia los enlaces a los nuevos ficheros minificados.
-gulp.task('copy',	function()	{
-		gulp.src('./app/index.html')
-				.pipe(useref())
-				.pipe(gulp.dest('./dist'));
-});
-
-//	Compila	las	plantillas	HTML	parciales	a	JavaScript
-//	para	ser	inyectadas	por	AngularJS	y	minificar	el	código
 gulp.task('templates',	function()	{
-		gulp.src('./app/views/**/*.tpl.html')
-				.pipe(templateCache({
-						root:	'views/',
-						module:	'frontEndApp.templates',
-						standalone:	true
-				}))
-				.pipe(gulp.dest('./app/scripts'));
+	gulp.src('./app/views/**/*.tpl.html')
+		.pipe(templateCache({
+			root:	'views/',
+			module:	'frontEndApp.templates',
+			standalone:	true
+		}))
+		.pipe(gulp.dest('./app/scripts'));
 });
 
-//	Vigila cambios que se produzcan	en el	código y lanza las tareas relacionadas
 gulp.task('watch', function() {
   gulp.watch(['./app/**/*.html'], ['livereload', 'templates']);
+	gulp.watch(['./app/stylesheets/**/*.scss'],	['styles',	'inject']);
   gulp.watch(['./app/scripts/**/*.js', './gulpfile.js'], ['jshint',	'inject']);
-  gulp.watch(['./bower.json'], ['wiredep']);
-  gulp.watch(['./app/**/*.html'], ['livereload']);
+  gulp.watch(['./bower.json'], ['inject-bower-components']);
 });
 
+gulp.task('default', ['templates', 'inject-bower-components', 'inject', 'watch', 'server']);
 
-gulp.task('default', ['server', 'templates', 'inject', 'wiredep', 'watch']);
-gulp.task('build', ['templates', 'compress', 'copy']);
+
+gulp.task('compress',	function()	{
+	gulp.src('./app/index.html')
+		.pipe(useref())
+		.pipe(gulpif('*.css',	minifyCss()))
+		.pipe(gulpif('*.js', uglify({ mangle: false })))
+		.pipe(gulp.dest('./dist'));
+});
+
+gulp.task('copy',	function()	{
+	gulp.src('./app/index.html')
+		.pipe(useref())
+		.pipe(gulp.dest('./dist'));
+});
+
+gulp.task('dist-server',	function()	{
+	connect.server({
+		root:	'./dist',
+		hostname:	'0.0.0.0',
+		port:	8088,
+	});
+});
+
+gulp.task('build', ['templates', 'compress', 'copy', 'dist-server']);
