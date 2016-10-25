@@ -12,3 +12,5 @@ app/lib
 
 #Dist Files
 /dist
+/app/scripts/templates.js
+/app/stylesheets/main.css

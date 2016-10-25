@@ -67,12 +67,12 @@ gulp.task('templates',	function()	{
 
 gulp.task('watch', function() {
   gulp.watch(['./app/**/*.html'], ['livereload', 'templates']);
-	gulp.watch(['./app/stylesheets/**/*.scss'],	['styles',	'inject']);
+	gulp.watch(['./app/stylesheets/**/*.scss'],	['styles', 'inject']);
   gulp.watch(['./app/scripts/**/*.js', './gulpfile.js'], ['jshint',	'inject']);
   gulp.watch(['./bower.json'], ['inject-bower-components']);
 });
 
-gulp.task('default', ['templates', 'inject-bower-components', 'inject', 'watch', 'server']);
+gulp.task('default', ['templates', 'styles', 'inject-bower-components', 'inject', 'watch', 'server']);
 
 
 gulp.task('compress',	function()	{
