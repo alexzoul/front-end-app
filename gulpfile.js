@@ -7,6 +7,7 @@ var	gulp =	require('gulp'),
 		useref = require('gulp-useref'),
     templateCache	=	require('gulp-angular-templatecache'),
 		sass = require('gulp-sass'),
+		sassLint = require('gulp-sass-lint'),
 		minifyCss	=	require('gulp-minify-css'),
     wiredep	=	require('wiredep').stream;
 
@@ -23,6 +24,18 @@ gulp.task('server',	function() {
 gulp.task('livereload',	function() {
 	gulp.src('./app/**/*.html')
 		.pipe(connect.reload());
+});
+
+gulp.task('scsslint', function() {
+	return gulp.src('./app/stylesheets/**/*.s+(a|c)ss')
+		.pipe(sassLint({
+			config: '.sass-lint.yml',
+			files: {
+				ignore: './app/stylesheets/reset.scss'
+			},
+		}))
+    .pipe(sassLint.format())
+    .pipe(sassLint.failOnError());
 });
 
 gulp.task('styles', function() {
@@ -67,12 +80,11 @@ gulp.task('templates',	function()	{
 
 gulp.task('watch', function() {
   gulp.watch(['./app/**/*.html'], ['livereload', 'templates']);
-	gulp.watch(['./app/stylesheets/**/*.scss'],	['styles', 'inject']);
-  gulp.watch(['./app/scripts/**/*.js', './gulpfile.js'], ['jshint',	'inject']);
-  gulp.watch(['./bower.json'], ['inject-bower-components']);
+	gulp.watch(['./app/stylesheets/**/*.scss'],	['scsslint', 'styles']);
+  gulp.watch(['./app/scripts/**/*.js', './gulpfile.js'], ['jshint']);
 });
 
-gulp.task('default', ['templates', 'styles', 'watch', 'inject-bower-components', 'inject', 'server']);
+gulp.task('default', ['templates', 'styles', 'inject-bower-components', 'inject', 'server', 'watch']);
 
 
 gulp.task('compress',	function()	{

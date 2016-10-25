@@ -29,10 +29,12 @@ td {
   margin: $zero;
   padding: $zero;
 }
+
 table {
-  border-collapse:collapse;
+  border-collapse: collapse;
   border-spacing: $zero;
 }
+
 fieldset,
 img {
   border: $zero;
@@ -47,53 +49,55 @@ em,
 strong,
 th,
 var {
-  font-style:normal;
-  font-weight:normal;
+  font-style: normal;
+  font-weight: normal;
 }
 
 ol,
 ul {
-  list-style:none;
+  list-style: none;
 }
 
 caption,
 th {
-  text-align:left;
+  text-align: left;
 }
+
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  font-size:100%;
-  font-weight:normal;
+  font-size: 100%;
+  font-weight: normal;
 }
-q:before,
-q:after {
-  content: $empty;
+
+q {
+  ::before,
+  ::after {
+    content: $empty;
+  }
 }
+
 abbr,
 acronym {
   border: $zero;
-  font-variant:normal;
+  font-variant: normal;
 }
 
 sup {
-  vertical-align:text-top;
+  vertical-align: text-top;
 }
+
 sub {
-  vertical-align:text-bottom;
+  vertical-align: text-bottom;
 }
+
 input,
 textarea,
 select {
-  font-family:inherit;
-  font-size:inherit;
-  font-weight:inherit;
-  *font-size:100%; /*to enable resizing for IE*/
-}
-/*because legend doesn't inherit in IE */
-legend {
-  color:#000;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
 }
