@@ -72,7 +72,7 @@ gulp.task('watch', function() {
   gulp.watch(['./bower.json'], ['inject-bower-components']);
 });
 
-gulp.task('default', ['templates', 'styles', 'inject-bower-components', 'inject', 'watch', 'server']);
+gulp.task('default', ['templates', 'styles', 'watch', 'inject-bower-components', 'inject', 'server']);
 
 
 gulp.task('compress',	function()	{
